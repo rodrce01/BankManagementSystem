@@ -1,37 +1,27 @@
 #include "BankAccount.h"
 #include <iostream>
 
-int BankAccount::accountCount = 0;
+int BankAccount::totalAccounts = 0;
 
 BankAccount::BankAccount() : accountNumber(0), accountType("Checking"), balance(0.0) {
-    accountCount++;
+    totalAccounts++;
 }
-BankAccount::BankAccount(int accNum, const std::string& type, double bal)
-    : accountNumber(accNum), accountType(type), balance(bal) {
-    accountCount++;
+
+BankAccount::BankAccount(int number, const std::string &ty, double bal)
+    : accountNumber(number), accountType(type), balance(bal) {
+    totalAccounts++;
 }
-BankAccount::BankAccount(const BankAccount& other)
-    : accountNumber(other.accountNumber), accountType(other.accountType),
-      balance(other.balance), transactionHistory(other.transactionHistory) {
-    accountCount++;
-}
-BankAccount::~BankAccount() {
-    accountCount--;
+
+BankAccount::BankAccount(const BankAccount &other)
+    : accountNumber(other.accountNumber), 
+    accountType(other.accountType),
+    balance(other.balance) {
+    totalAccounts++;
 }
 
 int BankAccount::getAccountNumber() const { return accountNumber; }
-void BankAccount::setAccountNumber(int accNum) { accountNumber = accNum; }
-
-std::string BankAccount::getAccountType() const { return accountType; }
-void BankAccount::setAccountType(const std::string& type) { accountType = type; }
-
-double BankAccount::getBalance() const { return balance; }
-void BankAccount::setBalance(double bal) { balance = bal; }
-
-void BankAccount::deposit(double amount) {
-    balance += amount;
-    transactionHistory.push_back("Deposited: " + std::to_string(amount));
-}
+std::string BankAccount:: getAccountType() const {return accountType;}
+double BankAccount::getBalance() const {return balance;}
 
 bool BankAccount::withdraw(double amount) {
     if (amount > balance) {
@@ -39,18 +29,19 @@ bool BankAccount::withdraw(double amount) {
         return false;
     }
     balance -= amount;
-    transactionHistory.push_back("Withdrew: " + std::to_string(amount));
     return true;
 }
 
-void BankAccount::printAccountSummary() const {
-    std::cout << "Account #" << accountNumber << " (" << accountType << ")\n";
-    std::cout << "Balance: $" << balance << "\nTransactions:\n";
-    for (const auto& t : transactionHistory) {
-        std::cout << " - " << t << "\n";
-    }
+void BankAccount::deposit(double amount) {
+    balance += amount;
 }
 
-int BankAccount::getAccountCount() {
-    return accountCount;
+void BankAccount::printAccountSummary() const {
+    std::cout << "Account Number: " << accountNumber << accountNumber << "\n"
+    << "Type: " << accountType << "\n"
+    << "Balance: $" << balance << "\n";
+}
+
+int BankAccount::getTotalAccounts() {
+    return totalAccounts;
 }
