@@ -1,32 +1,30 @@
 #ifndef USER_H
 #define USER_H
-
-#include <string>
+#include <String>
 #include "BankAccount.h"
 
 class User {
 private:
     std::string username;
     std::string password;
+    std::string fullName;
     BankAccount account;
 
 public:
-    User();  
-    User(const std::string& uname, const std::string& pwd, const BankAccount& acc);
-    User(const User& other);
+    User();
+    User(const std::string &u, const std::string &p, const std::string &name, const BankAccount &acc);
+    User(const User &other);
 
     std::string getUsername() const;
-    void setUsername(const std::string& uname);
-
     std::string getPassword() const;
-    void setPassword(const std::string& pwd);
+    std::string getFullName() const;
+
+    void setPassword(const std:: string &p);
+    void setFullName(const std::string &name);
 
     BankAccount& getAccount();
 
-    static User loadFromFile(const std::string& line);
-    std::string saveToFile() const;
-
-    bool verifyLogin(const std::string& uname, const std::string& pwd) const;
+    std::string serialize() const;
+    static User deserialize(const std::string &line);
 };
-
 #endif
