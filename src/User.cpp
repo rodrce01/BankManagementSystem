@@ -1,41 +1,45 @@
 #include "User.h"
 #include <sstream>
 
-User::User() : username(""), password(""), account() {}
+User::User() : username(""), password(""), fullName(""), account() {}
 
-User::User(const std::string& uname, const std::string& pwd, const BankAccount& acc)
-    : username(uname), password(pwd), account(acc) {}
+User::User(const std::string &u, const std::string &p, const std::string &name, const BankAccount &acc)
+    : username(u), password(p), fullName(name), account(acc) {}
 
-User::User(const User& other)
-    : username(other.username), password(other.password), account(other.account) {}
+User::User(const User &other)
+    : username(other.username), password(other.password), fullName(other.fullName), account(other.account) {}
 
 std::string User::getUsername() const { return username; }
-void User::setUsername(const std::string& uname) { username = uname; }
-
 std::string User::getPassword() const { return password; }
-void User::setPassword(const std::string& pwd) { password = pwd; }
+std::string User::getFullName() const { return fullName; }
+
+void User::setPassword(const std::string &p) { password = p; }
+void User::setFullName(const std::string &name) { fullName = name; }
 
 BankAccount& User::getAccount() { return account; }
 
-bool User::verifyLogin(const std::string& uname, const std::string& pwd) const {
-    return (username == uname && password == pwd);
-}
-
-User User::loadFromFile(const std::string& line) {
-    std::stringstream ss(line);
-    std::string uname, pwd, type;
-    int accNum;
-    double bal;
-    ss >> uname >> pwd >> accNum >> type >> bal;
-    BankAccount acc(accNum, type, bal);
-    return User(uname, pwd, acc);
-}
-
-std::string User::saveToFile() const {
-    std::stringstream ss;
-    ss << username << " " << password << " "
-       << account.getAccountNumber() << " "
-       << account.getAccountType() << " "
-       << account.getBalance();
+std::string User::serialize() const{
+    std::ostringstream ss;
+    ss << username << ","
+        << password << ","
+        << fullName << ","
+        << account.getAccountNumber() << ","
+        << account.getAccountType() << ","
+        << account.getBalance();
     return ss.str();
+}
+
+User User::deserialize(const std::string &line) {
+    std::stringstream ss(line);
+    std::string u, p, name, accNumStr, type, balanceStr;
+
+    getline(ss, u, ',');
+    getline(ss, p, ',');
+    getline(ss, name, ',');
+    getline(ss, accNumStr, ',');
+    getline(ss, type, ',');
+    getline(ss, balanceStr, ',');
+
+    BankAccount acc(std::stoi(accNumStr), type, std::stod(balanceStr));
+    return User(u, p, name, acc);
 }
