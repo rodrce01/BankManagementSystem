@@ -23,6 +23,10 @@ int BankAccount::getAccountNumber() const { return accountNumber; }
 std::string BankAccount:: getAccountType() const {return accountType;}
 double BankAccount::getBalance() const {return balance;}
 
+void BankAccount::setAccountType(const std::string &type) {
+    accountType = type;
+}
+
 bool BankAccount::withdraw(double amount) {
     if (amount > balance) {
         std::cout << "Error: Insufficient funds.\n";
@@ -37,7 +41,7 @@ void BankAccount::deposit(double amount) {
 }
 
 void BankAccount::printAccountSummary() const {
-    std::cout << "Account Number: " << accountNumber << accountNumber << "\n"
+    std::cout << "Account Number: " << accountNumber << "\n"
     << "Type: " << accountType << "\n"
     << "Balance: $" << balance << "\n";
 }

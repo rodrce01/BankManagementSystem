@@ -1,6 +1,6 @@
 #ifndef USER_H
 #define USER_H
-#include <String>
+#include <string>
 #include "BankAccount.h"
 
 class User {
@@ -19,7 +19,7 @@ public:
     std::string getPassword() const;
     std::string getFullName() const;
 
-    void setPassword(const std:: string &p);
+    void setPassword(const std::string &p);
     void setFullName(const std::string &name);
 
     BankAccount& getAccount();

@@ -19,9 +19,9 @@ public:
     std::string getAccountType() const;
     double getBalance() const;
 
-    void setAccountType(const std:: string &type);
+    void setAccountType(const std::string &type);
 
-    bool withDraw(double amount);
+    bool withdraw(double amount);
     void deposit(double amount);
     void printAccountSummary() const;
 
