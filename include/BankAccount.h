@@ -1,8 +1,31 @@
-// BankAccount.h
-// ------------------------------------------------
-// Declares the BankAccount class.
-// Represents a single bank account with attributes
-// such as account number, account type, and balance.
-// Provides operations like deposit, withdraw, and
-// printing the account summary.
-// Also contains a static member tracking total accounts.
+#ifndef BANKACCOUNT_H
+#define BANKACCOUNT_H
+#include <string>
+
+class BankAccount {
+private:
+    int accountNumber;
+    std::string accountType;
+    double balance;
+
+    static int totalAccounts; 
+
+public:
+    BankAccount();  
+    BankAccount(int number, const std::string &type, double bal);
+    BankAccount(const BankAccount &other);
+
+    int getAccountNumber() const;
+    std::string getAccountType() const;
+    double getBalance() const;
+
+    void setAccountType(const std:: string &type);
+
+    bool withDraw(double amount);
+    void deposit(double amount);
+    void printAccountSummary() const;
+
+    static int getTotalAccounts();
+};
+
+#endif
