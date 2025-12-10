@@ -1,7 +1,20 @@
-// Manager.h
-// ------------------------------------------------
-// Declares the Manager class.
-// Represents a bank manager with privileges to view
-// all user accounts and data.
-// Handles manager authentication using managers.txt.
-// No code can create managers; they must exist in the file.
+#ifndef MANAGER_H
+#define MANAGER_H
+
+#include <string>
+#include <vector>
+#include <utility>
+
+class Manager {
+private:
+    std::vector<std::pair<std::string, std::string>> managerList;
+
+public:
+    Manager();
+
+    void loadManagers(const std::string &filename);
+    bool login(const std::string &username, const std::string &password) const;
+
+};
+
+#endif
