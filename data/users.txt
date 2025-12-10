@@ -1,1 +1,4 @@
 crodriguez,1234,Cameron Rodriguez,12345678,Checking,30
+Alice,6789,Alice Margatroid,12102025,Savings,333.33
+Bob,password,Bob Builder,Funding,1000000
+John,doe,John Doe,Cheking,69
