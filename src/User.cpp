@@ -16,7 +16,13 @@ std::string User::getFullName() const { return fullName; }
 void User::setPassword(const std::string &p) { password = p; }
 void User::setFullName(const std::string &name) { fullName = name; }
 
-BankAccount& User::getAccount() { return account; }
+BankAccount& User::getAccount() { 
+    return account; 
+}
+
+const BankAccount& User::getAccount() const { 
+    return account; 
+}
 
 std::string User::serialize() const{
     std::ostringstream ss;

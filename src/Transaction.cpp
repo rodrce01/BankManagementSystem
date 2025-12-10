@@ -11,7 +11,8 @@ using namespace std;
 // ============================================================
 // Helper: Get timestamp
 // ============================================================
-static std::string currentTime() {
+std::string currentTime() {
+    /*
     time_t now = time(0);
     tm lt;
     localtime_s(&lt, &now);
@@ -19,11 +20,26 @@ static std::string currentTime() {
     char buffer[50];
     strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", &lt);
     return std::string(buffer);
+    */
+   time_t now = time(0);
+    tm lt;
+
+    #if defined(_WIN32) || defined(_WIN64)
+        localtime_s(&lt, &now);  // Windows
+    #else
+        localtime_r(&now, &lt);  // Mac/Linux
+    #endif
+
+        char buffer[50];
+        strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", &lt);
+        return std::string(buffer);
 }
 
 // ============================================================
 // Base Transaction Class
 // ============================================================
+
+/*
 class Transaction {
 protected:
     double amount;
@@ -43,10 +59,12 @@ public:
         return timestamp + " | " + getType() + " | Amount: $" + buffer;
     }
 };
+*/
 
 // ============================================================
 // Deposit Transaction
 // ============================================================
+/*
 class DepositTransaction : public Transaction {
 public:
     DepositTransaction(double amt)
@@ -54,10 +72,11 @@ public:
     }
     std::string getType() const override { return "DEPOSIT"; }
 };
-
+*/
 // ============================================================
 // Withdraw Transaction
 // ============================================================
+/*
 class WithdrawTransaction : public Transaction {
 public:
     WithdrawTransaction(double amt)
@@ -65,10 +84,11 @@ public:
     }
     std::string getType() const override { return "WITHDRAW"; }
 };
-
+*/
 // ============================================================
 // Logger
 // ============================================================
+/*
 class TransactionLogger {
 private:
     std::string filename;
@@ -90,3 +110,4 @@ public:
         fout.close();
     }
 };
+*/

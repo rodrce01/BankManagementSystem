@@ -8,7 +8,7 @@ BankAccount::BankAccount() : accountNumber(0), accountType("Checking"), balance(
 }
 
 BankAccount::BankAccount(int number, const std::string &ty, double bal)
-    : accountNumber(number), accountType(type), balance(bal) {
+    : accountNumber(number), accountType(ty), balance(bal) {
     totalAccounts++;
 }
 

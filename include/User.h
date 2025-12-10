@@ -22,7 +22,8 @@ public:
     void setPassword(const std::string &p);
     void setFullName(const std::string &name);
 
-    BankAccount& getAccount();
+    BankAccount& getAccount(); //non-const version (for deposit/withdraw)
+    const BankAccount& getAccount() const; //const ver(for read-only access)
 
     std::string serialize() const;
     static User deserialize(const std::string &line);
