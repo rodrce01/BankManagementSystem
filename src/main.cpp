@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <vector>
 #include <fstream>
 
 #include "User.h"
@@ -10,24 +9,28 @@
 
 using namespace std;
 
+const int MAX_USERS = 200;
+
 int main() {
-    vector<User> users;
+    User users[MAX_USERS];
+    int userCount = 0;
+
     Manager manager;
     TransactionLogger logger;
 
-    //load managers
     manager.loadManagers("data/managers.txt");
 
-    //load users from file
+    // load users
     ifstream userFile("data/users.txt");
     if (userFile.is_open()) {
         string line;
-        while (getline(userFile, line)) {
-            users.push_back(User::deserialize(line));
+        while (getline(userFile, line) && userCount < MAX_USERS) {
+            users[userCount] = User::deserialize(line);
+            userCount++;
         }
         userFile.close();
     } else {
-        cout << "ERROR: Could not open users.txt!!!!\n";
+        cout << "ERROR: Could not open users.txt!\n";
     }
 
     int choice;
@@ -49,20 +52,19 @@ int main() {
                 cout << "Enter password: ";
                 getline(cin, password);
 
-                bool loggedIn = false;
-                User *currentUser = nullptr;
+                User* currentUser = nullptr;
 
-                //check credentials
-                for (auto &u : users) {
-                    if (u.getUsername() == username && u.getPassword() == password) {
-                        loggedIn = true;
-                        currentUser = &u;
+                for (int i = 0; i < userCount; i++) {
+                    if (users[i].getUsername() == username &&
+                        users[i].getPassword() == password) {
+                        currentUser = &users[i];
                         break;
                     }
                 }
 
-                if (loggedIn) {
-                    cout << "Login successful! Welcome, " << currentUser->getFullName() << ".\n";
+                if (currentUser != nullptr) {
+                    cout << "Login successful! Welcome, "
+                         << currentUser->getFullName() << ".\n";
 
                     int userChoice;
                     do {
@@ -81,23 +83,21 @@ int main() {
                                 cout << "Enter amount to deposit: ";
                                 cin >> amt;
                                 cin.ignore();
-                                currentUser->getAccount().deposit(amt);
 
-                                //log transaction
+                                currentUser->getAccount().deposit(amt);
                                 DepositTransaction t(amt);
                                 logger.log(t, currentUser->getUsername());
-
                                 cout << "Deposit successful!\n";
                                 break;
                             }
+
                             case 2: {
                                 double amt;
                                 cout << "Enter amount to withdraw: ";
                                 cin >> amt;
                                 cin.ignore();
 
-                                if(currentUser->getAccount().withdraw(amt)) {
-                                    //log transaction
+                                if (currentUser->getAccount().withdraw(amt)) {
                                     WithdrawTransaction t(amt);
                                     logger.log(t, currentUser->getUsername());
                                     cout << "Withdrawal successful!\n";
@@ -106,35 +106,42 @@ int main() {
                                 }
                                 break;
                             }
+
                             case 3:
                                 currentUser->getAccount().printAccountSummary();
                                 break;
+
                             case 4:
-                                cout << "Logging out...\n";
+                                cout << "Logging out!\n";
                                 break;
+
                             default:
                                 cout << "Invalid choice.\n";
                         }
 
-                    } while(userChoice != 4);
+                    } while (userChoice != 4);
 
-                    //save updated user info back to file
+                    //save users on logout
                     ofstream out("data/users.txt");
-                    if(out.is_open()) {
-                        for(const auto &u : users) {
-                            out << u.serialize() << "\n";
-                        }
+                    if (out.is_open()) {
+                        for (int i = 0; i < userCount; i++)
+                            out << users[i].serialize() << "\n";
                         out.close();
                     }
 
                 } else {
-                    cout << "Login failed. Invalid username or password.\n";
+                    cout << "Login failed.\n";
                 }
 
                 break;
             }
 
             case 2: {
+                if (userCount >= MAX_USERS) {
+                    cout << "ERROR: User limit reached.\n";
+                    break;
+                }
+
                 string username, password, fullname;
                 int accNum;
                 string accType;
@@ -155,14 +162,14 @@ int main() {
                 cin >> balance;
                 cin.ignore();
 
-                BankAccount newAcc(accNum, accType, balance);
-                User newUser(username, password, fullname, newAcc);
-                users.push_back(newUser);
+                BankAccount acc(accNum, accType, balance);
+                users[userCount] = User(username, password, fullname, acc);
+                userCount++;
 
-                //save to file
+                //append to file
                 ofstream out("data/users.txt", ios::app);
-                if(out.is_open()) {
-                    out << newUser.serialize() << "\n";
+                if (out.is_open()) {
+                    out << users[userCount - 1].serialize() << "\n";
                     out.close();
                 }
 
@@ -177,28 +184,32 @@ int main() {
                 cout << "Enter manager password: ";
                 getline(cin, password);
 
-                if(manager.login(username, password)) {
-                    cout << "Login successful! Welcome, " << username << ".\n";
+                if (manager.login(username, password)) {
+                    cout << "Login successful!\n";
                     cout << "--- LIST OF USERS ---\n";
-                    for(const auto &u : users) {
-                        cout << u.getUsername() << " | " << u.getFullName() << " | Balance: $"
-                             << u.getAccount().getBalance() << "\n";
+
+                    for (int i = 0; i < userCount; i++) {
+                        cout << users[i].getUsername() << " | "
+                             << users[i].getFullName() << " | Balance: $"
+                             << users[i].getAccount().getBalance() << "\n";
                     }
+
                 } else {
-                    cout << "Login failed. Invalid credentials.\n";
+                    cout << "Manager login failed.\n";
                 }
                 break;
             }
 
             case 4:
-                cout << "Exiting program. Goodbye!\n";
+                cout << "Exiting!\n";
                 break;
 
             default:
-                cout << "Invalid choice. Try again.\n";
+                cout << "Invalid choice.\n";
         }
 
-    } while(choice != 4);
+    } while (choice != 4);
 
     return 0;
 }
+

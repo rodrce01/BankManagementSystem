@@ -3,10 +3,7 @@
 #include <iostream>
 #include <sstream>
 
-Manager::Manager() {
-    // Optionally, you can load managers here by default
-    // loadManagers("data/managers.txt");
-}
+Manager::Manager() : managerCount(0) {}
 
 void Manager::loadManagers(const std::string &filename) {
     std::ifstream fin(filename);
@@ -15,15 +12,17 @@ void Manager::loadManagers(const std::string &filename) {
         return;
     }
 
-    managerList.clear();
+    managerCount = 0;
     std::string line;
 
-    while (std::getline(fin, line)) {
+    while (std::getline(fin, line) && managerCount < MAX_MANAGERS) {
         std::stringstream ss(line);
         std::string username, password;
 
         if (std::getline(ss, username, ',') && std::getline(ss, password)) {
-            managerList.push_back({username, password});
+            usernames[managerCount] = username;
+            passwords[managerCount] = password;
+            managerCount++;
         }
     }
 
@@ -31,11 +30,9 @@ void Manager::loadManagers(const std::string &filename) {
 }
 
 bool Manager::login(const std::string &username, const std::string &password) const {
-    for (const auto &entry : managerList) {
-        if (entry.first == username && entry.second == password) {
-            return true; // login successful
-        }
+    for (int i = 0; i < managerCount; i++) {
+        if (usernames[i] == username && passwords[i] == password)
+            return true;
     }
     return false;
 }
-
