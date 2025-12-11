@@ -25,9 +25,9 @@ std::string currentTime() {
     tm lt;
 
     #if defined(_WIN32) || defined(_WIN64)
-        localtime_s(&lt, &now);  // Windows
+        localtime_s(&lt, &now);  //Windows
     #else
-        localtime_r(&now, &lt);  // Mac/Linux
+        localtime_r(&now, &lt);  //Mac/Linux
     #endif
 
         char buffer[50];
