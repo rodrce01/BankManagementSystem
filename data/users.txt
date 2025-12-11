@@ -1,2 +1,2 @@
-crodriguez,1234,Cameron Rodriguez,12345678,Checking,50
+crodriguez,1234,Cameron Rodriguez,12345678,Checking,73.44
 Alice,6789,Alice Margatroid,12102025,Savings,333.33

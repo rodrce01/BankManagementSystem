@@ -50,10 +50,10 @@ int main() {
     Manager manager;
     TransactionLogger logger;
 
-    // Load managers
+    //load managers
     manager.loadManagers("data/managers.txt");
 
-    // Load users
+    //load users
     ifstream userFile("data/users.txt");
     if (userFile.is_open()) {
         string line;
@@ -69,7 +69,7 @@ int main() {
 
     int choice;
     do {
-        cout << "\n=== BANK MANAGEMENT SYSTEM ===\n";
+        cout << "\nBANK MANAGEMENT SYSTEM\n";
         cout << "1. User Login\n";
         cout << "2. Create Account\n";
         cout << "3. Manager Login\n";
@@ -98,7 +98,7 @@ int main() {
                     cout << "Login successful! User: " << currentUser->getFullName() << ".\n";
                     int userChoice;
                     do {
-                        cout << "\n--- USER MENU ---\n";
+                        cout << "\nUSER MENU\n";
                         cout << "1. Deposit\n";
                         cout << "2. Withdraw\n";
                         cout << "3. Print Account Summary\n";
@@ -127,7 +127,8 @@ int main() {
                                     WithdrawTransaction t(amt);
                                     logger.log(t, currentUser->getUsername());
                                     cout << "Withdrawal successful!\n";
-                                } else {
+                                } 
+                                else {
                                     cout << "Insufficient funds.\n";
                                 }
                                 break;
@@ -140,10 +141,11 @@ int main() {
                                 string history[MAX_HISTORY];
                                 int count = 0;
                                 loadUserTransactions(currentUser->getUsername(), history, count, MAX_HISTORY, "data/transactionslog.txt");
-                                cout << "\n--- TRANSACTION HISTORY ---\n";
+                                cout << "\nTRANSACTION HISTORY\n";
                                 if (count == 0) {
                                     cout << "No transactions found.\n";
-                                } else {
+                                } 
+                                else {
                                     for (int i = 0; i < count; i++)
                                         cout << history[i] << "\n";
                                 }
@@ -160,12 +162,12 @@ int main() {
 
                     //save users on logout
                     saveUsers(users, userCount, "data/users.txt");
-                } else {
+                } 
+                else {
                     cout << "Login failed. Incorrect username or password.\n";
                 }
                 break;
             }
-
             case 2: {
                 if (userCount >= MAX_USERS) {
                     cout << "ERROR: User limit reached.\n";
@@ -177,18 +179,24 @@ int main() {
                 string accType;
                 double balance;
 
-                cout << "Enter new username: "; getline(cin, username);
-                cout << "Enter password: "; getline(cin, password);
-                cout << "Enter full name: "; getline(cin, fullname);
-                cout << "Enter account number: "; cin >> accNum; cin.ignore();
-                cout << "Enter account type: "; getline(cin, accType);
-                cout << "Enter initial balance: "; cin >> balance; cin.ignore();
+                cout << "Enter new username: ";
+                getline(cin, username);
+                cout << "Enter password: ";
+                getline(cin, password);
+                cout << "Enter full name: ";
+                getline(cin, fullname);
+                cout << "Enter account number: ";
+                cin >> accNum; cin.ignore();
+                cout << "Enter account type: ";
+                getline(cin, accType);
+                cout << "Enter initial balance: ";
+                cin >> balance; cin.ignore();
 
                 BankAccount acc(accNum, accType, balance);
                 users[userCount] = User(username, password, fullname, acc);
                 userCount++;
 
-                // Append to file
+                //append to file
                 ofstream out("data/users.txt", ios::app);
                 if (out.is_open()) {
                     out << users[userCount - 1].serialize() << "\n";
@@ -201,23 +209,25 @@ int main() {
 
             case 3: {
                 string username, password;
-                cout << "Enter manager username: "; getline(cin, username);
-                cout << "Enter manager password: "; getline(cin, password);
+                cout << "Enter manager username: ";
+                getline(cin, username);
+                cout << "Enter manager password: ";
+                getline(cin, password);
 
                 if (manager.login(username, password)) {
                     cout << "Manager login successful!\n";
                     int managerChoice;
                     do {
-                        cout << "\n--- MANAGER MENU ---\n";
+                        cout << "\nMANAGER MENU\n";
                         cout << "1. List Users\n";
                         cout << "2. Delete User\n";
                         cout << "3. Logout\n";
                         cout << "Enter your choice: ";
-                        cin >> managerChoice; cin.ignore();
-
+                        cin >> managerChoice;
+                        cin.ignore();
                         switch(managerChoice) {
                             case 1:
-                                cout << "--- LIST OF USERS ---\n";
+                                cout << "LIST OF USERS\n";
                                 for (int i = 0; i < userCount; i++) {
                                     cout << users[i].getUsername() << " | "
                                          << users[i].getFullName() << " | Balance: $"
@@ -239,12 +249,13 @@ int main() {
                                 }
 
                                 if (index != -1) {
-                                    for (int j = index; j < userCount - 1; j++)
+                                    for (int j = index;j < userCount - 1; j++)
                                         users[j] = users[j + 1];
                                     userCount--;
                                     saveUsers(users, userCount, "data/users.txt");
                                     cout << "User " << delUser << " deleted.\n";
-                                } else {
+                                } 
+                                else {
                                     cout << "User not found.\n";
                                 }
                                 break;
@@ -260,7 +271,8 @@ int main() {
 
                     } while (managerChoice != 3);
 
-                } else {
+                } 
+                else {
                     cout << "Manager login failed. Incorrect username or password.\n";
                 }
                 break;
@@ -271,9 +283,7 @@ int main() {
             default:
                 cout << "Must be number 1, 2, 3, or 4.\n";
         }
-
     } while (choice != 4);
 
     return 0;
 }
-
