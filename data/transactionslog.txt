@@ -5,3 +5,4 @@
 [Bob] 2025-12-08 13:14:27 | WITHDRAW | Amount: $120.00
 [crodriguez] 2025-12-10 02:47:21 | DEPOSIT | Amount: $10.00
 [crodriguez] 2025-12-10 02:47:31 | WITHDRAW | Amount: $5.00
+[crodriguez] 2025-12-10 20:39:18 | DEPOSIT | Amount: $20.00
